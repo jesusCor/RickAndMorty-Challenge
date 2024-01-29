@@ -15,7 +15,8 @@ import UIKit
 class CharactersTableViewCell: UITableViewCell {
     @IBOutlet weak var characterPhotoImageView: UIImageView!
     @IBOutlet weak var characterNameLabel: UILabel!
-    @IBOutlet weak var characterStatusLabel: UILabel!
+    @IBOutlet weak var characterStatusIcon: UIImageView!
+    @IBOutlet weak var characterStatusLabel: DecoratedCharacterStatusLabel!
 }
 
 

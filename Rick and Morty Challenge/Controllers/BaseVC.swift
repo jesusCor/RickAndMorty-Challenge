@@ -24,26 +24,16 @@ class BaseVC: UIViewController {
     // MARK: Styling.
     
     func configureNavigationBar() {
-        // Remove navigation bar title
-//        navigationItem.title = ""
-
-        // Make the background transparent
-//        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-//        navigationController?.navigationBar.shadowImage = UIImage()
-//        navigationController?.navigationBar.isTranslucent = true
+        // Set the navBar title size & color
+        navigationController?.navigationBar.titleTextAttributes = [
+            NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 30.0),
+            NSAttributedString.Key.foregroundColor: ColorsPalette.appBlue,
+            NSAttributedString.Key.strokeWidth: -3.0,
+            NSAttributedString.Key.strokeColor: ColorsPalette.appYellow
+        ]
         
         // Set navigation bar icons color to black
-        navigationController?.navigationBar.tintColor = UIColor.black
-
-//        // Add side menu icon on the top left
-//        let sideMenuIcon = UIImage(systemName: "line.horizontal.3")
-//        let sideMenuButton = UIBarButtonItem(image: sideMenuIcon, style: .plain, target: self, action: #selector(sideMenuTapped))
-//        navigationItem.leftBarButtonItem = sideMenuButton
-//
-//        // Add notifications icon on the top right
-//        let notificationsIcon = UIImage(systemName: "bell")
-//        let notificationsButton = UIBarButtonItem(image: notificationsIcon, style: .plain, target: self, action: #selector(notificationsTapped))
-//        navigationItem.rightBarButtonItem = notificationsButton
+        navigationController?.navigationBar.tintColor = ColorsPalette.appBlue
     }
     
     

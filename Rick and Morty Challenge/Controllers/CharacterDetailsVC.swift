@@ -55,9 +55,6 @@ class CharacterDetailsVC: BaseVC {
             return
         }
         
-        // Populate nav bar.
-        navigationItem.title = character.name
-        
         // We use Kingfisher to load and set the character's image.
         if let imageUrl = URL(string: character.imageUrl) {
             characterImageView.kf.setImage(with: imageUrl)

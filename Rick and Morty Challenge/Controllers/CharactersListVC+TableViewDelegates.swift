@@ -16,6 +16,9 @@ extension CharactersListVC: UITableViewDelegate {
         let vc = StoryboardUtils.getCharacterDetailsVC() as! CharacterDetailsVC
         vc.character = character
         self.navigationController?.pushViewController(vc, animated: true)
+        
+        // Avoid having the table view cell marked as selected after clicking on it.
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 
@@ -50,9 +53,11 @@ extension CharactersListVC: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell( withIdentifier: "CharactersTableViewCellIdentifier", for: indexPath ) as! CharactersTableViewCell
         
-        // Set rounded corners for the cell's content view
-        cell.contentView.layer.cornerRadius = 8
-        cell.contentView.layer.masksToBounds = true
+        // Set rounded corners & border for the cell.
+        cell.layer.cornerRadius = 8
+        cell.layer.masksToBounds = true
+        cell.layer.borderWidth = 2.0
+        cell.layer.borderColor = ColorsPalette.appYellow.cgColor
         
         // Populate cell from character.
         if (sortedCharacters.count > indexPath.section) {
@@ -64,13 +69,13 @@ extension CharactersListVC: UITableViewDataSource {
             }
             
             cell.characterNameLabel.text = character.name
-            cell.characterStatusLabel.text = character.status.outputName
+            cell.characterStatusIcon.backgroundColor = character.status.statusColor
+            cell.characterStatusLabel.styleForStatus(character.status)
         }
         
         return cell
     }
     
-    // TODO: Jesus (29/01/2024) - Only if we add support for pagination.
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         guard !sortedCharacters.isEmpty else { return }
 

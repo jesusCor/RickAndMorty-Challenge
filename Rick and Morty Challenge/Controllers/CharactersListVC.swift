@@ -57,14 +57,10 @@ class CharactersListVC: BaseVC {
         // Set navigation title.
         navigationItem.title = "Characters"
         
-        // Setup styling & delegates.
+        // Setup views.
         setupSearchTextField()
-        setupStandardsCheckSegmentControl()
-        charactersTableView.dataSource = self
-        charactersTableView.delegate = self
-        
-        // Register a placeholder footer view to create some spacing between cells.
-        charactersTableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "SpacerFooterView")
+        setupSortBySegmentControl()
+        setupCharactersTableView()
         
         // Enable pull-to-refresh functionality to the charactersTableView.
         configureRefresher()
@@ -92,11 +88,19 @@ class CharactersListVC: BaseVC {
         searchByNameTextField.addTarget(self, action: #selector(self.textFieldDidChange(_:)), for: .editingChanged)
     }
     
-    private func setupStandardsCheckSegmentControl() {
+    private func setupSortBySegmentControl() {
         // Set text color.
         sortBySegmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: ColorsPalette.whiteColor], for: .selected)
         sortBySegmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: ColorsPalette.statusGray], for: .normal)
         sortBySegmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
+    }
+    
+    private func setupCharactersTableView() {
+        charactersTableView.dataSource = self
+        charactersTableView.delegate = self
+        
+        // Register a placeholder footer view to create some spacing between cells.
+        charactersTableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "SpacerFooterView")
     }
     
     
