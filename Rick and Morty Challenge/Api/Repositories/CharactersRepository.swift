@@ -5,9 +5,7 @@
 //  Created by Jesus Coronado on 28/01/2024.
 //
 
-import Foundation
 import Alamofire
-import BackgroundTasks
 
 
 class CharactersRepository: BaseRepository {
@@ -19,10 +17,6 @@ class CharactersRepository: BaseRepository {
     // MARK: Endpoints
     
     let getCharactersEndpoint = "/character"
-    
-    
-    // MARK: Query parameters
-    let paramPage = "page"
     
     
     // MARK: Api functions.

@@ -17,3 +17,8 @@ class CharactersTableViewCell: UITableViewCell {
     @IBOutlet weak var characterNameLabel: UILabel!
     @IBOutlet weak var characterStatusLabel: UILabel!
 }
+
+
+class EpisodesTableViewCell: UITableViewCell {
+    @IBOutlet weak var episodeNameLabel: UILabel!
+}

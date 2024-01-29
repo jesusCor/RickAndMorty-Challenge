@@ -53,4 +53,23 @@ struct Character {
     let lastLocation: Location
     let imageUrl: String
     let episodesList: [String]
+    
+    // We'll calculate the character's popularity based on the number of episodes that he/she has been seen in.
+    var popularity: Int {
+        return episodesList.count
+    }
+    
+    // We wanna extract each episode number that this character appears in.
+    var episodeNumbers: [Int] {
+        let episodeNumbers = episodesList.compactMap { episodeUrl -> Int? in
+            // Intentar extraer el número de la URL
+            if let episodeNumberString = episodeUrl.split(separator: "/").last,
+               let episodeNumber = Int(episodeNumberString) {
+                return episodeNumber
+            } else {
+                return nil
+            }
+        }
+        return episodeNumbers
+    }
 }

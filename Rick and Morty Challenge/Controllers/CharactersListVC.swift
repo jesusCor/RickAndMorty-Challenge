@@ -20,15 +20,24 @@ class CharactersListVC: BaseVC {
     @IBOutlet weak var charactersTableView: UITableView!
     @IBOutlet weak var noDataLabel: UILabel!
     
+    // To handle pagination.
+    var currentPage: Int = 1
+    var lastPageReached: Bool = false
+    
     static let spacingBetweenCells = 10.0
     
     var refresher: UIRefreshControl!
     
-    var charactersToDisplay: [Character] = [] {
+    var fetchedCharacters: [Character] = [] {
+        didSet {
+            sortCharacters()
+        }
+    }
+    var sortedCharacters: [Character] = [] {
         didSet {
             DispatchQueue.main.async { [weak self] in
                 self?.charactersTableView.reloadData()
-                self?.noDataLabel.isHidden = !(self?.charactersToDisplay.isEmpty ?? false)
+                self?.noDataLabel.isHidden = !(self?.sortedCharacters.isEmpty ?? false)
             }
         }
     }
@@ -74,13 +83,11 @@ class CharactersListVC: BaseVC {
     // MARK: IBActions functions.
     
     @objc func segmentedControlValueChanged(_ sender: UISegmentedControl) {
-        if (selectedSortBy == .name) {
-            // TODO: Sort by name & go to the top of the table view.
-            charactersTableView.scrollToTop()
-        } else {
-            // TODO: Sort by popularity & go to the top of the table view.
-            charactersTableView.scrollToTop()
-        }
+        // Sort the list of characters first.
+        sortCharacters()
+        
+        // Scroll the table view to the top.
+        charactersTableView.scrollToTop()
     }
     
     // To allow ourselves to do a pull-to-refresh on the charactersTableView.
@@ -102,13 +109,21 @@ class CharactersListVC: BaseVC {
             showProgressHUD()
             
             do {
-                // TODO: Adapt pagination & take into account that pages starts with 1.
-                let response = try await CharactersRepository.shared.getCharactersPage(page: 1)
+                let response = try await CharactersRepository.shared.getCharactersPage(page: currentPage)
                 let parsedCharacters = response.results.compactMap{ $0.toModel() }
                 
                 // Refresh table view.
-                if (!parsedCharacters.isEmpty) {
-                    self.charactersToDisplay = parsedCharacters
+                if (currentPage == 1) {
+                    self.fetchedCharacters = parsedCharacters
+                } else {
+                    self.fetchedCharacters.append(contentsOf: parsedCharacters)
+                }
+                
+                // Update what page we've reached so far to allow us to keep scrolling down to fetch more data.
+                if (currentPage == response.info.pages && response.info.next == nil) {
+                    lastPageReached = true
+                } else {
+                    currentPage += 1
                 }
             }
             catch {
@@ -128,7 +143,21 @@ class CharactersListVC: BaseVC {
     
     // It'll get called when doing a pull-to-refresh.
     @objc func refresh(_ sender: Any? = nil) {
+        // Reset the current page first, as we've scrolled to the top.
+        currentPage = 1
+        
         fetchCharacters(byPullDownToRefresh: true)
+    }
+    
+    // We'll call this function every time we update the sortBy segmented control.
+    func sortCharacters() {
+        if (selectedSortBy == .name) {
+            // Sort by name.
+            self.sortedCharacters = fetchedCharacters.sorted{ $0.name < $1.name }
+        } else {
+            // Sort by popularity.
+            self.sortedCharacters = fetchedCharacters.sorted{ $0.popularity > $1.popularity }
+        }
     }
 
 }

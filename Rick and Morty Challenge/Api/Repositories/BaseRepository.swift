@@ -17,6 +17,8 @@ open class BaseRepository {
         "Content-Type": "application/json",
     ])
     
+    let paramPage = "page"
+    
 }
 
 

@@ -11,7 +11,7 @@ import Kingfisher
 
 extension CharactersListVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let character = charactersToDisplay[indexPath.section]
+        let character = sortedCharacters[indexPath.section]
         
         let vc = StoryboardUtils.getCharacterDetailsVC() as! CharacterDetailsVC
         vc.character = character
@@ -26,7 +26,7 @@ extension CharactersListVC: UITableViewDataSource {
      We'll have one character per section to allow us to have some empty spacing between cells.
      */
     func numberOfSections(in tableView: UITableView) -> Int {
-        return charactersToDisplay.count
+        return sortedCharacters.count
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
@@ -55,8 +55,8 @@ extension CharactersListVC: UITableViewDataSource {
         cell.contentView.layer.masksToBounds = true
         
         // Populate cell from character.
-        if (charactersToDisplay.count > indexPath.section) {
-            let character = charactersToDisplay[indexPath.section]
+        if (sortedCharacters.count > indexPath.section) {
+            let character = sortedCharacters[indexPath.section]
             
             // We use Kingfisher to load and set the character's image.
             if let imageUrl = URL(string: character.imageUrl) {
@@ -71,12 +71,12 @@ extension CharactersListVC: UITableViewDataSource {
     }
     
     // TODO: Jesus (29/01/2024) - Only if we add support for pagination.
-//    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-//        guard !charactersToDisplay.isEmpty else { return }
-//
-//        // To keep fetching characters (in a paginated way) whenever we keep scrolling down.
-//        if (indexPath.section == charactersToDisplay.count - 1 && !last) {
-//            fetchCharacters()
-//        }
-//    }
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard !sortedCharacters.isEmpty else { return }
+
+        // To keep fetching characters (in a paginated way) whenever we keep scrolling down.
+        if (indexPath.section == sortedCharacters.count - 1 && !lastPageReached) {
+            fetchCharacters()
+        }
+    }
 }
