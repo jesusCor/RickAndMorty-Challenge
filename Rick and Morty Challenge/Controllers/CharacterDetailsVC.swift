@@ -33,9 +33,7 @@ class CharacterDetailsVC: BaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Setup delegates.
-        episodesTableView.dataSource = self
-        
+        setupViews()
         populateCharacter()
     }
     
@@ -49,9 +47,25 @@ class CharacterDetailsVC: BaseVC {
     
     // MARK: Initialization functions.
     
+    func setupViews() {
+        // Set navigation bar icons color to black.
+        navigationController?.navigationBar.tintColor = ColorsPalette.appBlue
+        
+        // Character image view.
+        characterImageView.layer.cornerRadius = 8
+        characterImageView.layer.borderWidth = 2.0
+        characterImageView.layer.borderColor = ColorsPalette.appYellow.cgColor
+        characterImageView.layer.masksToBounds = true
+        
+        // Episodes table view.
+        episodesTableView.dataSource = self
+        episodesTableView.allowsSelection = false
+    }
+    
     func populateCharacter() {
         guard let character = character else {
-            self.displayAlertWithMessage(message: "Error populating!", toShowCancel: true)
+            // TODO: Handle error in a more appropiate way.
+            self.displayAlertWithMessage(message: "Invalid Character!", toShowCancel: true)
             return
         }
         
@@ -59,10 +73,20 @@ class CharacterDetailsVC: BaseVC {
         if let imageUrl = URL(string: character.imageUrl) {
             characterImageView.kf.setImage(with: imageUrl)
         }
-        characterNameLabel.text = character.name
-        characterStatusLabel.text = character.status.outputName
-        characterOriginLabel.text = character.origin.name
-        characterLastLocationLabel.text = character.lastLocation.name
+        
+        // Setup character name.
+        let attributes: [NSAttributedString.Key: Any] = [
+            NSAttributedString.Key.strokeWidth: -3.0,
+            NSAttributedString.Key.strokeColor: ColorsPalette.appYellow
+        ]
+        let attributedString = NSAttributedString(string: character.name, attributes: attributes)
+        characterNameLabel.attributedText = attributedString
+        
+        // Remaining labels.
+        characterStatusLabel.text = "• STATUS: \(character.status.outputName)"
+        characterSpecieLabel.text = "• SPECIE: \(character.specie)"
+        characterOriginLabel.text = "• ORIGIN: \(character.origin.name)"
+        characterLastLocationLabel.text = "• LAST LOCATION: \(character.lastLocation.name)"
     }
     
     

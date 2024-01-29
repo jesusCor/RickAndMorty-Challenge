@@ -21,23 +21,12 @@ extension CharacterDetailsVC: UITableViewDataSource {
         return 1
     }
     
-//    /**
-//     We'll use these delegate's functions to add some spacing between cells.
-//     */
-//    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-//        // Create an empty footer view with the desired height
-//        let spacerFooterView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "SpacerFooterView") ?? UITableViewHeaderFooterView()
-//        spacerFooterView.contentView.backgroundColor = .clear
-//        spacerFooterView.contentView.frame.size.height = CharactersListVC.spacingBetweenCells
-//        return spacerFooterView
-//    }
-
-//    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-//        return CharactersListVC.spacingBetweenCells
-//    }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell( withIdentifier: "EpisodesTableViewCellIdentifier", for: indexPath ) as! EpisodesTableViewCell
+        
+        // Set border for the cell.
+        cell.layer.borderWidth = 0.5
+        cell.layer.borderColor = UIColor.black.cgColor
         
         // Populate cell from character.
         if (episodesToDisplay.count > indexPath.section) {
