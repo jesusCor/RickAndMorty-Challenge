@@ -1,0 +1,13 @@
+# Xcode
+.DS_Store
+build/
+DerivedData/
+
+# Swift
+.swiftpm
+Package.resolved
+.build/
+xcuserdata/
+
+# CocoaPods
+Pods/
