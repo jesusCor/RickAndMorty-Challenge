@@ -13,6 +13,8 @@ class CharactersRepository: BaseRepository {
     static let shared = CharactersRepository()
     private override init() {}
     
+    let paramName = "name"
+    
     
     // MARK: Endpoints
     
@@ -21,10 +23,13 @@ class CharactersRepository: BaseRepository {
     
     // MARK: Api functions.
     
-    func getCharactersPage(page: Int) async throws -> CharactersPage {
+    func getCharactersPage(page: Int, characterName: String) async throws -> CharactersPage {
         do {
             // We add the pageable query parameters first.
-            let params: [String : Any] = [paramPage: page]
+            var params: [String : Any] = [paramPage: page]
+            
+            // Add characterName as query param (if empty, it'll fetch all the characters).
+            params[paramName] = characterName
             
             return try await getRequest(getCharactersEndpoint, parameters: params).serializingDecodable(CharactersPage.self).value
         } catch {

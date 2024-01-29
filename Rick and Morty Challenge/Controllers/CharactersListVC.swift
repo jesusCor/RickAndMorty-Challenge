@@ -58,6 +58,7 @@ class CharactersListVC: BaseVC {
         navigationItem.title = "Characters"
         
         // Setup styling & delegates.
+        setupSearchTextField()
         setupStandardsCheckSegmentControl()
         charactersTableView.dataSource = self
         charactersTableView.delegate = self
@@ -68,9 +69,28 @@ class CharactersListVC: BaseVC {
         // Enable pull-to-refresh functionality to the charactersTableView.
         configureRefresher()
     }
+    
+    // We'll fetch the first page of characters as soon as we populate the view.
+    override func viewWillAppear(_ animated: Bool) {
+        Task { @MainActor in
+            fetchCharacters()
+        }
+    }
 
     
     // MARK: Initialization functions.
+    
+    private func setupSearchTextField() {
+        // Styling.
+        searchByNameTextField.layer.cornerRadius = 8
+        searchByNameTextField.layer.masksToBounds = true
+        
+        // Delegate.
+        searchByNameTextField.delegate = self
+        
+        // Add listener to update the characters list when entering a new value.
+        searchByNameTextField.addTarget(self, action: #selector(self.textFieldDidChange(_:)), for: .editingChanged)
+    }
     
     private func setupStandardsCheckSegmentControl() {
         // Set text color.
@@ -81,6 +101,12 @@ class CharactersListVC: BaseVC {
     
     
     // MARK: IBActions functions.
+    
+    @objc func textFieldDidChange(_ textField: UITextField) {
+        // Set a 1 second delay before searching again.
+        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(searchCharactersByName), object: nil)
+        perform(#selector(searchCharactersByName), with: nil, afterDelay: 1)
+    }
     
     @objc func segmentedControlValueChanged(_ sender: UISegmentedControl) {
         // Sort the list of characters first.
@@ -102,14 +128,17 @@ class CharactersListVC: BaseVC {
     // MARK: Characters functions.
     
     func fetchCharacters(byPullDownToRefresh: Bool = false) {
-        
-        // TODO: Handle the sort by mechanicsm.
-        
         Task { @MainActor in
             showProgressHUD()
             
             do {
-                let response = try await CharactersRepository.shared.getCharactersPage(page: currentPage)
+                // We read the filter text field first.
+                let filterByNameString = searchByNameTextField.text ?? ""
+                
+                let response = try await CharactersRepository.shared.getCharactersPage(
+                    page: currentPage,
+                    characterName: filterByNameString
+                )
                 let parsedCharacters = response.results.compactMap{ $0.toModel() }
                 
                 // Refresh table view.
@@ -157,6 +186,16 @@ class CharactersListVC: BaseVC {
         } else {
             // Sort by popularity.
             self.sortedCharacters = fetchedCharacters.sorted{ $0.popularity > $1.popularity }
+        }
+    }
+    
+    @objc func searchCharactersByName() {
+        // We wanna do a search only if we've entered at least two characters.
+        if (searchByNameTextField.text?.count != 1) {
+            // Reset the current page first.
+            currentPage = 1
+            
+            fetchCharacters()
         }
     }
 
