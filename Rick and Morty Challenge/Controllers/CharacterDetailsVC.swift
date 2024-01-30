@@ -17,6 +17,10 @@ class CharacterDetailsVC: BaseVC {
     @IBOutlet weak var characterLastLocationLabel: UILabel!
     @IBOutlet weak var episodesTableView: UITableView!
     
+    // We'll initialize the repository based on running tests or not.
+    var runMockRepositories: Bool = false
+    var episodesRepository: EpisodesRepository?
+    
     var character: Character?
     
     var episodesToDisplay: [Episode] = [] {
@@ -92,7 +96,8 @@ class CharacterDetailsVC: BaseVC {
     
     // MARK: Episodes functions.
     
-    func fetchEpisodes() {
+    // It'll include an optional completion closure param that it'll be used when testing.
+    func fetchEpisodes(completion: (() -> Void)? = nil) {
         Task { @MainActor in
             showProgressHUD()
             
@@ -101,8 +106,15 @@ class CharacterDetailsVC: BaseVC {
                 
                 // We'll exercise the single episode or the multiple episodes endpoint depending on the count.
                 if (!character!.episodeNumbers.isEmpty) {
+                    // We'll initialize our charactersRepository depending on if we are running tests or not.
+                    if (episodesRepository == nil) {
+                        self.episodesRepository = (runMockRepositories)
+                                ? MockEpisodesRepository()
+                                : EpisodesRepository.shared
+                    }
+                    
                     if (character!.episodeNumbers.count == 1) {
-                        let response = try await EpisodesRepository.shared.getEpisode(episode: character!.episodeNumbers.first!)
+                        let response = try await episodesRepository!.getEpisode(episode: character!.episodeNumbers.first!)
                         parsedEpisodes.append(response.toModel())
                     } else {
                         let response = try await EpisodesRepository.shared.getMultipleEpisodes(episodes: character!.episodeNumbers)
@@ -120,6 +132,9 @@ class CharacterDetailsVC: BaseVC {
             }
             
             dismissProgressHUD()
+            
+            // Call the completion handler if provided to indicate that the fetch operation is complete.
+            completion?()
         }
     }
     

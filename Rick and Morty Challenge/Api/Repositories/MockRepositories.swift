@@ -27,3 +27,30 @@ final class MockCharactersRepository: CharactersRepository {
     }
     
 }
+
+// Mock repository class that subclasses the EpisodesRepository.
+final class MockEpisodesRepository: EpisodesRepository {
+    
+    override func getEpisode(episode: Int) async throws -> EpisodeResponse {
+        // It returns the episode 1.
+        let mockSingleEpisodeName = "SingleEpisode"
+        
+        guard let mockEpisode = JsonUtils.parseJson(jsonName: mockSingleEpisodeName, model: EpisodeResponse.self) else {
+            throw AppErrorType.unknown("Error deserializing the mock SingleEpisode")
+        }
+        
+        return mockEpisode
+    }
+    
+    override func getMultipleEpisodes(episodes: [Int]) async throws -> [EpisodeResponse] {
+        // It returns the episodes 3 & 4.
+        let mockMultipleEpisodesName = "MultipleEpisodes"
+        
+        guard let mockEpisodes = JsonUtils.parseJson(jsonName: mockMultipleEpisodesName, model: [EpisodeResponse].self) else {
+            throw AppErrorType.unknown("Error deserializing the mock MultipleEpisodes")
+        }
+        
+        return mockEpisodes
+    }
+    
+}

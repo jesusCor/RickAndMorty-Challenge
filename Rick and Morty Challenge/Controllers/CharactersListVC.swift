@@ -20,7 +20,7 @@ class CharactersListVC: BaseVC {
     @IBOutlet weak var charactersTableView: UITableView!
     @IBOutlet weak var noDataLabel: UILabel!
     
-    // We'll initialize the repository from the AppDelegate based on running tests or not.
+    // We'll initialize the repository based on running tests or not.
     var runMockRepositories: Bool = false
     var charactersRepository: CharactersRepository?
     

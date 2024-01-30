@@ -11,7 +11,7 @@ import Alamofire
 class EpisodesRepository: BaseRepository {
     
     static let shared = EpisodesRepository()
-    private override init() {}
+    override init() {}
     
     
     // MARK: Endpoints
