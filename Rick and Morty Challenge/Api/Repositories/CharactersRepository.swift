@@ -11,7 +11,7 @@ import Alamofire
 class CharactersRepository: BaseRepository {
     
     static let shared = CharactersRepository()
-    private override init() {}
+    override init() {}
     
     let paramName = "name"
     

@@ -20,6 +20,10 @@ class CharactersListVC: BaseVC {
     @IBOutlet weak var charactersTableView: UITableView!
     @IBOutlet weak var noDataLabel: UILabel!
     
+    // We'll initialize the repository from the AppDelegate based on running tests or not.
+    var runMockRepositories: Bool = false
+    var charactersRepository: CharactersRepository?
+    
     // To handle pagination.
     var currentPage: Int = 1
     var lastPageReached: Bool = false
@@ -131,7 +135,8 @@ class CharactersListVC: BaseVC {
     
     // MARK: Characters functions.
     
-    func fetchCharacters(byPullDownToRefresh: Bool = false) {
+    // It'll include an optional completion closure param that it'll be used when testing.
+    func fetchCharacters(byPullDownToRefresh: Bool = false, completion: (() -> Void)? = nil) {
         Task { @MainActor in
             showProgressHUD()
             
@@ -139,7 +144,14 @@ class CharactersListVC: BaseVC {
                 // We read the filter text field first.
                 let filterByNameString = searchByNameTextField.text ?? ""
                 
-                let response = try await CharactersRepository.shared.getCharactersPage(
+                // We'll initialize our charactersRepository depending on if we are running tests or not.
+                if (charactersRepository == nil) {
+                    self.charactersRepository = (runMockRepositories)
+                            ? MockCharactersRepository()
+                            : CharactersRepository.shared
+                }
+                
+                let response = try await charactersRepository!.getCharactersPage(
                     page: currentPage,
                     characterName: filterByNameString
                 )
@@ -171,6 +183,9 @@ class CharactersListVC: BaseVC {
             }
             
             dismissProgressHUD()
+            
+            // Call the completion handler if provided to indicate that the fetch operation is complete.
+            completion?()
         }
     }
     
