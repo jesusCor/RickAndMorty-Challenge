@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import Rick_and_Morty_Challenge
+@testable import RickAndMortyChallenge
 
 
 class CharactersListVCTests: XCTestCase {

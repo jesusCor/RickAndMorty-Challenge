@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "EA1F2DBD2B643DCC00E45ADB"
-               BuildableName = "Rick and Morty Challenge.app"
-               BlueprintName = "Rick and Morty Challenge"
-               ReferencedContainer = "container:Rick and Morty Challenge.xcodeproj">
+               BuildableName = "RickAndMortyChallenge.app"
+               BlueprintName = "RickAndMortyChallenge"
+               ReferencedContainer = "container:RickAndMortyChallenge.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -34,9 +34,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "EACE7A992B687F2B00E2C69E"
-               BuildableName = "Rick and Morty Challenge Tests.xctest"
-               BlueprintName = "Rick and Morty Challenge Tests"
-               ReferencedContainer = "container:Rick and Morty Challenge.xcodeproj">
+               BuildableName = "RickAndMortyChallenge Tests.xctest"
+               BlueprintName = "RickAndMortyChallenge Tests"
+               ReferencedContainer = "container:RickAndMortyChallenge.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -56,9 +56,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EA1F2DBD2B643DCC00E45ADB"
-            BuildableName = "Rick and Morty Challenge.app"
-            BlueprintName = "Rick and Morty Challenge"
-            ReferencedContainer = "container:Rick and Morty Challenge.xcodeproj">
+            BuildableName = "RickAndMortyChallenge.app"
+            BlueprintName = "RickAndMortyChallenge"
+            ReferencedContainer = "container:RickAndMortyChallenge.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -73,9 +73,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EA1F2DBD2B643DCC00E45ADB"
-            BuildableName = "Rick and Morty Challenge.app"
-            BlueprintName = "Rick and Morty Challenge"
-            ReferencedContainer = "container:Rick and Morty Challenge.xcodeproj">
+            BuildableName = "RickAndMortyChallenge.app"
+            BlueprintName = "RickAndMortyChallenge"
+            ReferencedContainer = "container:RickAndMortyChallenge.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
